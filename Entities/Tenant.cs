@@ -1,9 +1,9 @@
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace eShopApi.Entities
 {
+    [Index(nameof(UniqueAddress), IsUnique = true)]
     public class Tenant
     {
         [Column("tenant_id")]
@@ -12,9 +12,8 @@ namespace eShopApi.Entities
         [Column("tenant_name")]
         public required string Name { get; set; }
 
-        [Column("product_id")]
-        public int ProductId { get; set; }
+        [Column("unique_address")]
+        public required string UniqueAddress { get; set; }
         public required List<Product> Products { get; set; }
     }
-
 }

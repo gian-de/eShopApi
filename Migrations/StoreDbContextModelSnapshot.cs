@@ -2,21 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using eShopApi.Data;
 
 #nullable disable
 
-namespace eShopApi.Data.Migrations
+namespace eShopApi.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20240325063442_TweakProductTableV6")]
-    partial class TweakProductTableV6
+    partial class StoreDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,11 +139,15 @@ namespace eShopApi.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("tenant_name");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer")
-                        .HasColumnName("product_id");
+                    b.Property<string>("UniqueAddress")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("unique_address");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UniqueAddress")
+                        .IsUnique();
 
                     b.ToTable("tenant", (string)null);
                 });
@@ -155,7 +156,8 @@ namespace eShopApi.Data.Migrations
                 {
                     b.HasOne("eShopApi.Entities.Tenant", "Tenant")
                         .WithMany("Products")
-                        .HasForeignKey("TenantId");
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Tenant");
                 });

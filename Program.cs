@@ -24,6 +24,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+// seed data if there's not data in db already
+try
+{
+    context.Database.Migrate();
+    DbInitializer.Initialize(context);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "A problem occurred during migration");
+}
 
 app.Run();
 

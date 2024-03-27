@@ -29,8 +29,6 @@ namespace eShopApi.Entities
         [Column("qty_in_stock")]
         public required int QtyInStock { get; set; }
 
-        // [Column("product_variant_id")]
-        // public int ProductVariantId { get; set; }
         public List<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 
         [Column("tenant_id")]
@@ -38,3 +36,6 @@ namespace eShopApi.Entities
         public Tenant? Tenant { get; set; }
     }
 }
+
+// [Column("product_variant_id")]
+        // public int ProductVariantId { get; set; }

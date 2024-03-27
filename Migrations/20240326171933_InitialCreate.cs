@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace eShopApi.Data.Migrations
+namespace eShopApi.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -12,7 +12,20 @@ namespace eShopApi.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "tenant",
+                columns: table => new
+                {
+                    tenant_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    tenant_name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tenant", x => x.tenant_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "product",
                 columns: table => new
                 {
                     product_id = table.Column<int>(type: "integer", nullable: false)
@@ -23,15 +36,22 @@ namespace eShopApi.Data.Migrations
                     brand = table.Column<string>(type: "text", nullable: false),
                     price = table.Column<long>(type: "bigint", nullable: false),
                     type_of_product = table.Column<string>(type: "text", nullable: false),
-                    qty_in_stock = table.Column<int>(type: "integer", nullable: false)
+                    qty_in_stock = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.product_id);
+                    table.PrimaryKey("PK_product", x => x.product_id);
+                    table.ForeignKey(
+                        name: "FK_product_tenant_tenant_id",
+                        column: x => x.tenant_id,
+                        principalTable: "tenant",
+                        principalColumn: "tenant_id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductVariants",
+                name: "product_variant",
                 columns: table => new
                 {
                     variant_id = table.Column<int>(type: "integer", nullable: false)
@@ -41,17 +61,17 @@ namespace eShopApi.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductVariants", x => x.variant_id);
+                    table.PrimaryKey("PK_product_variant", x => x.variant_id);
                     table.ForeignKey(
-                        name: "FK_ProductVariants_Products_product_id",
+                        name: "FK_product_variant_product_product_id",
                         column: x => x.product_id,
-                        principalTable: "Products",
+                        principalTable: "product",
                         principalColumn: "product_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductImages",
+                name: "product_images",
                 columns: table => new
                 {
                     image_id = table.Column<int>(type: "integer", nullable: false)
@@ -61,23 +81,28 @@ namespace eShopApi.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductImages", x => x.image_id);
+                    table.PrimaryKey("PK_product_images", x => x.image_id);
                     table.ForeignKey(
-                        name: "FK_ProductImages_ProductVariants_product_variant_id",
+                        name: "FK_product_images_product_variant_product_variant_id",
                         column: x => x.product_variant_id,
-                        principalTable: "ProductVariants",
+                        principalTable: "product_variant",
                         principalColumn: "variant_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductImages_product_variant_id",
-                table: "ProductImages",
+                name: "IX_product_tenant_id",
+                table: "product",
+                column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_product_images_product_variant_id",
+                table: "product_images",
                 column: "product_variant_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_product_id",
-                table: "ProductVariants",
+                name: "IX_product_variant_product_id",
+                table: "product_variant",
                 column: "product_id");
         }
 
@@ -85,13 +110,16 @@ namespace eShopApi.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProductImages");
+                name: "product_images");
 
             migrationBuilder.DropTable(
-                name: "ProductVariants");
+                name: "product_variant");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "product");
+
+            migrationBuilder.DropTable(
+                name: "tenant");
         }
     }
 }

@@ -21,11 +21,17 @@ namespace eShopApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // modelBuilder.Entity<Tenant>()
-            //     .HasMany(t => t.Products)
-            //     .WithOne(p => p.Tenant)
-            //     .HasForeignKey(p => p.TenantId)
-            //     .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Product>()
+            .HasOne(p => p.Tenant)
+            .WithMany(t => t.Products)
+            .HasForeignKey(p => p.TenantId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Tenant>()
+                .HasMany(t => t.Products)
+                .WithOne(p => p.Tenant)
+                .HasForeignKey(p => p.TenantId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // modelBuilder.Entity<Product>()
             // .HasMany(p => p.ProductVariants)
