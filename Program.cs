@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using eShopApi.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,12 @@ builder.Services.AddDbContext<StoreDbContext>(opt =>
 {
     opt.UseNpgsql(builder.Configuration.GetConnectionString("local"));
 });
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
