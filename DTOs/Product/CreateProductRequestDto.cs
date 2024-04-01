@@ -1,3 +1,4 @@
+using eShopApi.DTOs.ProductImage;
 using eShopApi.DTOs.ProductVariant;
 
 namespace eShopApi.DTOs.Product
