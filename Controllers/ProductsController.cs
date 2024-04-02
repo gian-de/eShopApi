@@ -33,8 +33,10 @@ namespace eShopApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct([FromRoute] int id)
         {
-            var product = await _context.Products.FindAsync(id);
-
+            var product = await _context.Products
+                                            .Include(p => p.ProductVariants)
+                                            .ThenInclude(pv => pv.ProductImages)
+                                            .FirstOrDefaultAsync(p => p.Id == id);
             if (product is null) return NotFound();
 
             return Ok(product.ToProductDto());
