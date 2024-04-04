@@ -16,7 +16,7 @@ namespace eShopApi.Entities
 
         public Product? Product { get; set; }
 
-        public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public List<ProductImage>? ProductImages { get; set; }
 
     }
 }

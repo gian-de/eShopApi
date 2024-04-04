@@ -38,4 +38,4 @@ namespace eShopApi.Entities
 }
 
 // [Column("product_variant_id")]
-        // public int ProductVariantId { get; set; }
+// public int ProductVariantId { get; set; }

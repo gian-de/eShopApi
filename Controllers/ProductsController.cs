@@ -104,57 +104,34 @@ namespace eShopApi.Controllers
 
             return Ok(product);
         }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateProduct([FromRoute] int id, [FromBody] UpdateProductRequestDto updateProduct)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var product = await _context.Products
+                            .Include(p => p.ProductVariants)
+                            .ThenInclude(pv => pv.ProductImages)
+                            .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null) return NotFound($"Product with ID {id} not found.");
+
+            product.UpdateProductFromDto(updateProduct);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the product");
+            }
+
+            return Ok(product.ToProductDto());
+
+        }
     }
 }
 
-// {
-//   "sku": "test1",
-//   "name": "test1",
-//   "description": "test1",
-//   "brand": "test1",
-//   "price": 10,
-//   "typeProduct": "test1",
-//   "qtyInStock": 10,
-//   "productVariants": [
-//     {
 
-//       "color": "test1",
-//       "productImages": [
-//         {
-
-//           "imageUrl": "test1"
-//         }
-//       ]
-//     }
-//   ]
-// }
-
-// {
-//   "sku": "test1",
-//   "name": "test1",
-//   "description": "test1",
-//   "brand": "test1",
-//   "price": 10,
-//   "typeProduct": "test1",
-//   "qtyInStock": 10,
-//   "productVariants": [
-//     {
-
-//       "color": "test1",
-//       "productImages": [
-//         {
-
-//           "imageUrl": "test1111",
-//         },
-// {
-
-//           "imageUrl": "test2222",
-//         },
-// {
-
-//           "imageUrl": "test333",
-//         }
-//       ]
-//     }
-//   ]
-// }

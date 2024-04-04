@@ -21,3 +21,57 @@ namespace eShopApi.DTOs.Product
         }
     }
 }
+
+// use to test POST endpoint
+
+// {
+//   "sku": "test1",
+//   "name": "test1",
+//   "description": "test1",
+//   "brand": "test1",
+//   "price": 10,
+//   "typeProduct": "test1",
+//   "qtyInStock": 10,
+//   "productVariants": [
+//     {
+
+//       "color": "test1",
+//       "productImages": [
+//         {
+
+//           "imageUrl": "test1"
+//         }
+//       ]
+//     }
+//   ]
+// }
+
+// {
+//   "sku": "test1",
+//   "name": "test1",
+//   "description": "test1",
+//   "brand": "test1",
+//   "price": 10,
+//   "typeProduct": "test1",
+//   "qtyInStock": 10,
+//   "productVariants": [
+//     {
+
+//       "color": "test1",
+//       "productImages": [
+//         {
+
+//           "imageUrl": "test1111",
+//         },
+// {
+
+//           "imageUrl": "test2222",
+//         },
+// {
+
+//           "imageUrl": "test333",
+//         }
+//       ]
+//     }
+//   ]
+// }
